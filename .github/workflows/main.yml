@@ -1,0 +1,42 @@
+name: BuildApp
+
+on:
+  # push:
+  #   branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+    DOTNETVERSION: 8.0.402.1
+
+jobs:
+  testBSMac:
+    runs-on: macos-14
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{env.DOTNETVERSION}}
+
+      - name: Install .NET MAUI
+        shell: bash
+        run: |
+          dotnet workload install maui macos ios wasm-tools 
+
+      - name: Restore nuget packages
+        run: |
+          dotnet restore SuperSafeApp.sln
+
+      - name: Build iOS
+        shell: bash
+        run: |
+          cd SuperSafeApp/
+          dotnet publish -f net8.0-maccatalyst -c Release -p:BuildIpa=False
+
+      
+
+      
