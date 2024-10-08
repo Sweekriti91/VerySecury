@@ -10,7 +10,7 @@ env:
     DOTNETVERSION: 8.0.402
 
 jobs:
-  testBSMac:
+  buildApp:
     runs-on: macos-14
     
     steps:
